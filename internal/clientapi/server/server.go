@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -28,4 +29,9 @@ func (s *Server) initRoutes() {
 	r := s.Router
 
 	r.HandleFunc("/port/{locode}", s.GetPortByLocode).Methods(http.MethodGet)
+}
+
+func writeResponse(w http.ResponseWriter, code int, msg string) {
+	w.WriteHeader(code)
+	fmt.Fprintf(w, "%v\n", msg)
 }
