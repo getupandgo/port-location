@@ -1,4 +1,4 @@
-package clientapi
+package main
 
 import (
 	"context"
@@ -14,12 +14,18 @@ import (
 	"port-location/internal/clientapi/server"
 )
 
-func main() {
-	conf := clientapi.Config{
-		clientapi.HTTPServer{},
-		clientapi.GRPCServer{},
-	}
+var conf = clientapi.Config{
+	HTTPServer: clientapi.HTTPServer{
+		Host: "localhost",
+		Port: "8000",
+	},
+	GRPCServer: clientapi.GRPCServer{
+		Host: "localhost",
+		Port: "9000",
+	},
+}
 
+func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 
