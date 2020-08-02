@@ -28,7 +28,7 @@ func (s *Client) SendPortInfo(ctx context.Context, port model.Port) error {
 }
 
 func (s *Client) GetPortInfoByLocode(ctx context.Context, locode string) (model.Port, error) {
-	res, err := s.conn.GetPortInfoByLocode(ctx, &portdomainV1.GetPortInfoByLocodeRequest{
+	res, err := s.conn.GetPortByLocode(ctx, &portdomainV1.GetPortByLocodeRequest{
 		Locode: locode,
 	})
 	if err != nil {
