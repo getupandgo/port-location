@@ -1,12 +1,15 @@
 excludes:
   - .vendor
+  - ./api/proto/imports
 
 protoc:
   version: 3.8.0
+  includes:
+    - ./api/proto/imports
 
 generate:
   go_options:
-    import_path: github.com/getupandgo/port-location/api/proto
+    import_path: github.com/getupandgo/port-location
   plugins:
     - name: go
       type: go
