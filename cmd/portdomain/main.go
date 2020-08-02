@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"net"
@@ -9,6 +8,7 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 
@@ -40,17 +40,13 @@ func main() {
 		conf.DB.Host, conf.DB.Port, conf.DB.Username, conf.DB.Password, conf.DB.Name,
 	)
 
-	db, err := sql.Open("postgres", psqlConf)
+	db, err := sqlx.Connect("postgres", psqlConf)
 	if err != nil {
 		log.Fatalf("failed to connect to db: %v", err)
 	}
 	defer db.Close()
 
-	if err = db.Ping(); err != nil {
-		log.Fatalf("failed to connect to db: %v", err)
-	}
-
-	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
 	if err != nil {
 		log.Fatalf("failed to apply migrations: %v", err)
 	}

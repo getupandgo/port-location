@@ -2,19 +2,19 @@ package storage
 
 import (
 	"context"
-	"database/sql"
 	"strconv"
 
+	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 
 	"port-location/internal/portdomain/model"
 )
 
 type Client struct {
-	db *sql.DB
+	db *sqlx.DB
 }
 
-func NewClient(db *sql.DB) Client {
+func NewClient(db *sqlx.DB) Client {
 	return Client{
 		db: db,
 	}
@@ -33,12 +33,12 @@ ON CONFLICT (locode) DO
 }
 
 func (c *Client) GetPort(ctx context.Context, locode string) (model.Port, error) {
-	var p model.Port
-	if err := c.db.QueryRowContext(ctx, "SELECT * FROM ports WHERE locode = ?", locode).Scan(&p); err != nil {
+	var p Port
+	if err := c.db.GetContext(ctx, &p, "SELECT * FROM ports WHERE locode = $1", locode); err != nil {
 		return model.Port{}, err
 	}
 
-	return p, nil
+	return toModelPort(p), nil
 }
 
 func floatToString(n float64) string {
