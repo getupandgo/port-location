@@ -4,3 +4,9 @@ run:
 
 linters:
   enable-all: true
+  disable:
+    - ineffassign
+
+linters-settings:
+  lll:
+    line-length: 140

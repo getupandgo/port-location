@@ -8,12 +8,13 @@ import (
 
 	"google.golang.org/grpc"
 
-	portdomainV1 "port-location/api/proto/portdomain/v1"
+	portdomainv1 "port-location/api/proto/portdomain/v1"
 	"port-location/internal/clientapi"
 	"port-location/internal/clientapi/portdomain"
 	"port-location/internal/clientapi/server"
 )
 
+// nolint: gochecknoglobals
 var conf = clientapi.Config{
 	HTTPServer: clientapi.HTTPServer{
 		Host: "localhost",
@@ -35,7 +36,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	portDomainClient := portdomain.NewClient(portdomainV1.NewPortDomainAPIClient(conn))
+	portDomainClient := portdomain.NewClient(portdomainv1.NewPortDomainAPIClient(conn))
 
 	s := server.NewServer(portDomainClient)
 	log.Fatal(http.ListenAndServe(":"+conf.HTTPServer.Port, s.Router))

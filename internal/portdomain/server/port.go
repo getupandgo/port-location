@@ -6,19 +6,20 @@ import (
 
 	"google.golang.org/genproto/googleapis/type/latlng"
 
-	portdomainV1 "port-location/api/proto/portdomain/v1"
+	portdomainv1 "port-location/api/proto/portdomain/v1"
 	"port-location/internal/portdomain/model"
 )
 
-func (s *Server) UpsertPort(ctx context.Context, req *portdomainV1.UpsertPortRequest) (*portdomainV1.UpsertPortResponse, error) {
+func (s *Server) UpsertPort(ctx context.Context, req *portdomainv1.UpsertPortRequest) (*portdomainv1.UpsertPortResponse, error) {
 	if err := s.storage.UpsertPort(ctx, fromGRPCPort(req.Port)); err != nil {
 		return nil, err
 	}
 
-	return &portdomainV1.UpsertPortResponse{}, nil
+	return &portdomainv1.UpsertPortResponse{}, nil
 }
 
-func (s *Server) GetPortByLocode(ctx context.Context, req *portdomainV1.GetPortByLocodeRequest) (*portdomainV1.GetPortByLocodeResponse, error) {
+func (s *Server) GetPortByLocode(ctx context.Context,
+	req *portdomainv1.GetPortByLocodeRequest) (*portdomainv1.GetPortByLocodeResponse, error) {
 	if req.Locode == "" {
 		return nil, errors.New("locode cannot be empty")
 	}
@@ -28,11 +29,11 @@ func (s *Server) GetPortByLocode(ctx context.Context, req *portdomainV1.GetPortB
 		return nil, err
 	}
 
-	return &portdomainV1.GetPortByLocodeResponse{Port: toGRPCPort(p)}, nil
+	return &portdomainv1.GetPortByLocodeResponse{Port: toGRPCPort(p)}, nil
 }
 
-func toGRPCPort(p model.Port) *portdomainV1.Port {
-	return &portdomainV1.Port{
+func toGRPCPort(p model.Port) *portdomainv1.Port {
+	return &portdomainv1.Port{
 		Locode:  p.Locode,
 		Name:    p.Name,
 		City:    p.City,
@@ -50,7 +51,7 @@ func toGRPCPort(p model.Port) *portdomainV1.Port {
 	}
 }
 
-func fromGRPCPort(p *portdomainV1.Port) model.Port {
+func fromGRPCPort(p *portdomainv1.Port) model.Port {
 	return model.Port{
 		Locode:  p.Locode,
 		Name:    p.Name,

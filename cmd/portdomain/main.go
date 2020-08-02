@@ -12,12 +12,13 @@ import (
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 
-	portdomainV1 "port-location/api/proto/portdomain/v1"
+	portdomainv1 "port-location/api/proto/portdomain/v1"
 	"port-location/internal/portdomain"
 	"port-location/internal/portdomain/server"
 	"port-location/internal/portdomain/storage"
 )
 
+// nolint: gochecknoglobals
 var conf = portdomain.Config{
 	GRPCServer: portdomain.GRPCServer{
 		Host: "localhost",
@@ -45,31 +46,39 @@ func main() {
 	}
 	defer db.Close()
 
+	if err = db.Ping(); err != nil {
+		log.Fatalf("failed to connect to db: %v", err)
+	}
+
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		log.Fatalf("failed to apply migrations: %v", err)
+	}
+
 	m, err := migrate.NewWithDatabaseInstance(conf.DB.MigrationsDir, conf.DB.Name, driver)
 	if err != nil {
 		log.Fatalf("failed to apply migrations: %v", err)
 	}
 
 	if err := m.Up(); err != nil {
-		log.Fatalf("failed to apply migrations: %v", err)
-	}
-
-	if err = db.Ping(); err != nil {
-		log.Fatalf("failed to connect to db: %v", err)
+		if err != migrate.ErrNoChange {
+			log.Fatalf("failed to apply migrations: %v", err)
+		}
 	}
 
 	sc := storage.NewClient(db)
 	portDomainServer := server.NewServer(sc)
 
 	grpcServerConf := fmt.Sprintf("%s:%s", conf.GRPCServer.Host, conf.GRPCServer.Port)
+
 	lis, err := net.Listen("tcp", grpcServerConf)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
 	grpcServer := grpc.NewServer()
-	portdomainV1.RegisterPortDomainAPIServer(grpcServer, portDomainServer)
+	portdomainv1.RegisterPortDomainAPIServer(grpcServer, portDomainServer)
+
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to start grpc server: %v", err)
 	}

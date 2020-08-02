@@ -27,6 +27,7 @@ func (c *Client) UpsertPort(ctx context.Context, port model.Port) error {
 				     EXCLUDED.province, EXCLUDED.timezone, EXCLUDED.unlocs,EXCLUDED.foreign_code)`,
 		port.Locode, port.Name, port.City, port.Country, port.Alias, port.Regions, port.Coordinates,
 		port.Province, port.Timezone, port.Unlocs, port.ForeignCode)
+
 	return err
 }
 

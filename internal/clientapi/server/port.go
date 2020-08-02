@@ -18,7 +18,6 @@ func (s *Server) GetPortByLocode(w http.ResponseWriter, r *http.Request) {
 	port, err := s.portDomainClient.GetPortInfoByLocode(r.Context(), locode)
 	if err != nil {
 		writeResponse(w, http.StatusInternalServerError, "failed to get port info")
-
 	}
 
 	b, err := json.Marshal(port)
@@ -26,5 +25,5 @@ func (s *Server) GetPortByLocode(w http.ResponseWriter, r *http.Request) {
 		writeResponse(w, http.StatusInternalServerError, "failed to marshal port info")
 	}
 
-	w.Write(b)
+	_, _ = w.Write(b)
 }

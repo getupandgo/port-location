@@ -5,22 +5,22 @@ import (
 
 	"google.golang.org/genproto/googleapis/type/latlng"
 
-	portdomainV1 "port-location/api/proto/portdomain/v1"
+	portdomainv1 "port-location/api/proto/portdomain/v1"
 	"port-location/internal/clientapi/model"
 )
 
 type Client struct {
-	conn portdomainV1.PortDomainAPIClient
+	conn portdomainv1.PortDomainAPIClient
 }
 
-func NewClient(conn portdomainV1.PortDomainAPIClient) Client {
+func NewClient(conn portdomainv1.PortDomainAPIClient) Client {
 	return Client{
 		conn: conn,
 	}
 }
 
 func (s *Client) SendPortInfo(ctx context.Context, port model.Port) error {
-	_, err := s.conn.UpsertPort(ctx, &portdomainV1.UpsertPortRequest{
+	_, err := s.conn.UpsertPort(ctx, &portdomainv1.UpsertPortRequest{
 		Port: toGRPCPort(port),
 	})
 
@@ -28,7 +28,7 @@ func (s *Client) SendPortInfo(ctx context.Context, port model.Port) error {
 }
 
 func (s *Client) GetPortInfoByLocode(ctx context.Context, locode string) (model.Port, error) {
-	res, err := s.conn.GetPortByLocode(ctx, &portdomainV1.GetPortByLocodeRequest{
+	res, err := s.conn.GetPortByLocode(ctx, &portdomainv1.GetPortByLocodeRequest{
 		Locode: locode,
 	})
 	if err != nil {
@@ -38,8 +38,8 @@ func (s *Client) GetPortInfoByLocode(ctx context.Context, locode string) (model.
 	return fromGRPCPort(res.Port), nil
 }
 
-func toGRPCPort(p model.Port) *portdomainV1.Port {
-	return &portdomainV1.Port{
+func toGRPCPort(p model.Port) *portdomainv1.Port {
+	return &portdomainv1.Port{
 		Locode:  p.Locode,
 		Name:    p.Name,
 		City:    p.City,
@@ -57,7 +57,7 @@ func toGRPCPort(p model.Port) *portdomainV1.Port {
 	}
 }
 
-func fromGRPCPort(p *portdomainV1.Port) model.Port {
+func fromGRPCPort(p *portdomainv1.Port) model.Port {
 	return model.Port{
 		Locode:  p.Locode,
 		Name:    p.Name,
