@@ -1,0 +1,6 @@
+run:
+  skip-dirs:
+    - ".*mock"
+
+linters:
+  enable-all: true

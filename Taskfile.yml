@@ -1,0 +1,46 @@
+version: '2'
+
+vars:
+  BIN_DIR: '{{ default "bin" .BUILD_BIN_DIR }}'
+
+tasks:
+  build:
+    desc: "build binaries in {{ .BIN_DIR }}"
+    cmds:
+      - mkdir -p "{{ .BIN_DIR }}"
+        go build -o "{{ .BIN_DIR }}/" ./cmd/...
+
+  run:
+    desc: "runs local api binary with config file provided in API_CONFIG_PATH"
+    deps: [build]
+    env:
+      CONFIG_PATH: '{{ default "cmd/api/config.local.yml" .API_CONFIG_PATH }}'
+      CONFIG_PRINT: pretty
+    cmds:
+        - "{{ .BIN_DIR }}/api"
+
+  generate:
+    desc: "runs go generate"
+    status:
+      - sh -c '[ ! -z $SKIP_GENERATE ]'
+    cmds:
+      - go generate -x ./...
+
+  lint:
+    desc: "Run linters"
+    cmds:
+      - golangci-lint run --deadline=10m  --color always ./...
+      - prototool lint ./api/proto
+      - prototool format -l ./api/proto
+
+  test_integration:
+    desc: "Run integration tests"
+    cmds:
+      - CGO_ENABLED=1 go test -race -p=1 -count=1 ./test/...
+
+  gen_grpc:
+    desc: "Generate go files for gRPC"
+    cmds:
+      - prototool format -w
+      - prototool generate .
+
