@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package portdomain.v1;
+
+import "google/type/latlng.proto";
+
+message Port {
+  string locode = 1;
+  string name = 2;
+  string city = 3;
+  string country = 4;
+  repeated string alias = 5;
+  repeated string regions = 6;
+  google.type.LatLng coordinates = 7;
+  string province = 8;
+  string timezone = 9;
+  repeated string unlocs = 10;
+  int32 foreign_code = 11;
+}
