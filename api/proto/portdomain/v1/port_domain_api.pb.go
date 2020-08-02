@@ -94,78 +94,78 @@ func (m *UpsertPortResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpsertPortResponse proto.InternalMessageInfo
 
-type GetPortInfoByLocodeRequest struct {
+type GetPortByLocodeRequest struct {
 	Locode               string   `protobuf:"bytes,1,opt,name=locode,proto3" json:"locode,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetPortInfoByLocodeRequest) Reset()         { *m = GetPortInfoByLocodeRequest{} }
-func (m *GetPortInfoByLocodeRequest) String() string { return proto.CompactTextString(m) }
-func (*GetPortInfoByLocodeRequest) ProtoMessage()    {}
-func (*GetPortInfoByLocodeRequest) Descriptor() ([]byte, []int) {
+func (m *GetPortByLocodeRequest) Reset()         { *m = GetPortByLocodeRequest{} }
+func (m *GetPortByLocodeRequest) String() string { return proto.CompactTextString(m) }
+func (*GetPortByLocodeRequest) ProtoMessage()    {}
+func (*GetPortByLocodeRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_91b0cf120d2396f8, []int{2}
 }
 
-func (m *GetPortInfoByLocodeRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetPortInfoByLocodeRequest.Unmarshal(m, b)
+func (m *GetPortByLocodeRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetPortByLocodeRequest.Unmarshal(m, b)
 }
-func (m *GetPortInfoByLocodeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetPortInfoByLocodeRequest.Marshal(b, m, deterministic)
+func (m *GetPortByLocodeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetPortByLocodeRequest.Marshal(b, m, deterministic)
 }
-func (m *GetPortInfoByLocodeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetPortInfoByLocodeRequest.Merge(m, src)
+func (m *GetPortByLocodeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetPortByLocodeRequest.Merge(m, src)
 }
-func (m *GetPortInfoByLocodeRequest) XXX_Size() int {
-	return xxx_messageInfo_GetPortInfoByLocodeRequest.Size(m)
+func (m *GetPortByLocodeRequest) XXX_Size() int {
+	return xxx_messageInfo_GetPortByLocodeRequest.Size(m)
 }
-func (m *GetPortInfoByLocodeRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetPortInfoByLocodeRequest.DiscardUnknown(m)
+func (m *GetPortByLocodeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetPortByLocodeRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GetPortInfoByLocodeRequest proto.InternalMessageInfo
+var xxx_messageInfo_GetPortByLocodeRequest proto.InternalMessageInfo
 
-func (m *GetPortInfoByLocodeRequest) GetLocode() string {
+func (m *GetPortByLocodeRequest) GetLocode() string {
 	if m != nil {
 		return m.Locode
 	}
 	return ""
 }
 
-type GetPortInfoByLocodeResponse struct {
+type GetPortByLocodeResponse struct {
 	Port                 *Port    `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetPortInfoByLocodeResponse) Reset()         { *m = GetPortInfoByLocodeResponse{} }
-func (m *GetPortInfoByLocodeResponse) String() string { return proto.CompactTextString(m) }
-func (*GetPortInfoByLocodeResponse) ProtoMessage()    {}
-func (*GetPortInfoByLocodeResponse) Descriptor() ([]byte, []int) {
+func (m *GetPortByLocodeResponse) Reset()         { *m = GetPortByLocodeResponse{} }
+func (m *GetPortByLocodeResponse) String() string { return proto.CompactTextString(m) }
+func (*GetPortByLocodeResponse) ProtoMessage()    {}
+func (*GetPortByLocodeResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_91b0cf120d2396f8, []int{3}
 }
 
-func (m *GetPortInfoByLocodeResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetPortInfoByLocodeResponse.Unmarshal(m, b)
+func (m *GetPortByLocodeResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetPortByLocodeResponse.Unmarshal(m, b)
 }
-func (m *GetPortInfoByLocodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetPortInfoByLocodeResponse.Marshal(b, m, deterministic)
+func (m *GetPortByLocodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetPortByLocodeResponse.Marshal(b, m, deterministic)
 }
-func (m *GetPortInfoByLocodeResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetPortInfoByLocodeResponse.Merge(m, src)
+func (m *GetPortByLocodeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetPortByLocodeResponse.Merge(m, src)
 }
-func (m *GetPortInfoByLocodeResponse) XXX_Size() int {
-	return xxx_messageInfo_GetPortInfoByLocodeResponse.Size(m)
+func (m *GetPortByLocodeResponse) XXX_Size() int {
+	return xxx_messageInfo_GetPortByLocodeResponse.Size(m)
 }
-func (m *GetPortInfoByLocodeResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetPortInfoByLocodeResponse.DiscardUnknown(m)
+func (m *GetPortByLocodeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetPortByLocodeResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GetPortInfoByLocodeResponse proto.InternalMessageInfo
+var xxx_messageInfo_GetPortByLocodeResponse proto.InternalMessageInfo
 
-func (m *GetPortInfoByLocodeResponse) GetPort() *Port {
+func (m *GetPortByLocodeResponse) GetPort() *Port {
 	if m != nil {
 		return m.Port
 	}
@@ -175,8 +175,8 @@ func (m *GetPortInfoByLocodeResponse) GetPort() *Port {
 func init() {
 	proto.RegisterType((*UpsertPortRequest)(nil), "portdomain.v1.UpsertPortRequest")
 	proto.RegisterType((*UpsertPortResponse)(nil), "portdomain.v1.UpsertPortResponse")
-	proto.RegisterType((*GetPortInfoByLocodeRequest)(nil), "portdomain.v1.GetPortInfoByLocodeRequest")
-	proto.RegisterType((*GetPortInfoByLocodeResponse)(nil), "portdomain.v1.GetPortInfoByLocodeResponse")
+	proto.RegisterType((*GetPortByLocodeRequest)(nil), "portdomain.v1.GetPortByLocodeRequest")
+	proto.RegisterType((*GetPortByLocodeResponse)(nil), "portdomain.v1.GetPortByLocodeResponse")
 }
 
 func init() {
@@ -184,7 +184,7 @@ func init() {
 }
 
 var fileDescriptor_91b0cf120d2396f8 = []byte{
-	// 245 bytes of a gzipped FileDescriptorProto
+	// 241 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x4d, 0x2c, 0xc8, 0xd4,
 	0x2f, 0x28, 0xca, 0x2f, 0xc9, 0xd7, 0x2f, 0xc8, 0x2f, 0x2a, 0x49, 0xc9, 0xcf, 0x4d, 0xcc, 0xcc,
 	0xd3, 0x2f, 0x33, 0x04, 0xf3, 0xe2, 0x21, 0xdc, 0xf8, 0xc4, 0x82, 0x4c, 0x3d, 0xb0, 0x1a, 0x21,
@@ -192,15 +192,15 @@ var fileDescriptor_91b0cf120d2396f8 = []byte{
 	0x94, 0x6c, 0xb8, 0x04, 0x43, 0x0b, 0x8a, 0x53, 0x8b, 0x4a, 0x02, 0xf2, 0x8b, 0x4a, 0x82, 0x52,
 	0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x84, 0xd4, 0xb9, 0x58, 0x40, 0xea, 0x24, 0x18, 0x15, 0x18, 0x35,
 	0xb8, 0x8d, 0x84, 0xf5, 0x50, 0xcc, 0xd6, 0x03, 0xab, 0x04, 0x2b, 0x50, 0x12, 0xe1, 0x12, 0x42,
-	0xd6, 0x5d, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0xaa, 0x64, 0xc2, 0x25, 0xe5, 0x9e, 0x0a, 0x16, 0xf2,
-	0xcc, 0x4b, 0xcb, 0x77, 0xaa, 0xf4, 0xc9, 0x4f, 0xce, 0x4f, 0x49, 0x85, 0x19, 0x2e, 0xc6, 0xc5,
-	0x96, 0x03, 0x16, 0x00, 0x1b, 0xcf, 0x19, 0x04, 0xe5, 0x29, 0xb9, 0x71, 0x49, 0x63, 0xd5, 0x05,
-	0x31, 0x94, 0x68, 0x37, 0x19, 0x5d, 0x60, 0xe4, 0xe2, 0x05, 0x71, 0x5d, 0xc0, 0x92, 0x8e, 0x01,
-	0x9e, 0x42, 0x81, 0x5c, 0x5c, 0x08, 0x57, 0x0a, 0x29, 0xa0, 0x69, 0xc5, 0xf0, 0xbe, 0x94, 0x22,
-	0x1e, 0x15, 0x50, 0xd7, 0xe4, 0x70, 0x09, 0x63, 0x71, 0xac, 0x90, 0x26, 0x9a, 0x4e, 0xdc, 0xc1,
-	0x20, 0xa5, 0x45, 0x8c, 0x52, 0x88, 0x6d, 0x4e, 0x6a, 0x51, 0x2a, 0x38, 0xe2, 0xd3, 0x1a, 0xc1,
-	0x0b, 0x33, 0x4c, 0x62, 0x03, 0xab, 0x30, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xd0, 0x08, 0x53,
-	0x4b, 0x3c, 0x02, 0x00, 0x00,
+	0xd6, 0x5d, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0xaa, 0x64, 0xc0, 0x25, 0xe6, 0x9e, 0x0a, 0x16, 0x72,
+	0xaa, 0xf4, 0xc9, 0x4f, 0xce, 0x4f, 0x49, 0x85, 0x19, 0x2c, 0xc6, 0xc5, 0x96, 0x03, 0x16, 0x00,
+	0x1b, 0xcd, 0x19, 0x04, 0xe5, 0x29, 0x39, 0x71, 0x89, 0x63, 0xe8, 0x80, 0x18, 0x46, 0xb4, 0x5b,
+	0x8c, 0x8e, 0x30, 0x72, 0xf1, 0x82, 0xb8, 0x2e, 0x60, 0x49, 0xc7, 0x00, 0x4f, 0xa1, 0x40, 0x2e,
+	0x2e, 0x84, 0xeb, 0x84, 0x14, 0xd0, 0xb4, 0x62, 0x78, 0x5b, 0x4a, 0x11, 0x8f, 0x0a, 0xa8, 0x6b,
+	0x12, 0xb8, 0xf8, 0xd1, 0x1c, 0x2a, 0xa4, 0x8a, 0xa6, 0x0b, 0xbb, 0xd7, 0xa5, 0xd4, 0x08, 0x29,
+	0x83, 0xd8, 0xe0, 0xa4, 0x16, 0xa5, 0x82, 0x23, 0xee, 0xac, 0x11, 0xbc, 0x30, 0xc3, 0x24, 0x36,
+	0xb0, 0x0a, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x69, 0x26, 0xdc, 0x23, 0x28, 0x02, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -216,7 +216,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PortDomainAPIClient interface {
 	UpsertPort(ctx context.Context, in *UpsertPortRequest, opts ...grpc.CallOption) (*UpsertPortResponse, error)
-	GetPortInfoByLocode(ctx context.Context, in *GetPortInfoByLocodeRequest, opts ...grpc.CallOption) (*GetPortInfoByLocodeResponse, error)
+	GetPortByLocode(ctx context.Context, in *GetPortByLocodeRequest, opts ...grpc.CallOption) (*GetPortByLocodeResponse, error)
 }
 
 type portDomainAPIClient struct {
@@ -236,9 +236,9 @@ func (c *portDomainAPIClient) UpsertPort(ctx context.Context, in *UpsertPortRequ
 	return out, nil
 }
 
-func (c *portDomainAPIClient) GetPortInfoByLocode(ctx context.Context, in *GetPortInfoByLocodeRequest, opts ...grpc.CallOption) (*GetPortInfoByLocodeResponse, error) {
-	out := new(GetPortInfoByLocodeResponse)
-	err := c.cc.Invoke(ctx, "/portdomain.v1.PortDomainAPI/GetPortInfoByLocode", in, out, opts...)
+func (c *portDomainAPIClient) GetPortByLocode(ctx context.Context, in *GetPortByLocodeRequest, opts ...grpc.CallOption) (*GetPortByLocodeResponse, error) {
+	out := new(GetPortByLocodeResponse)
+	err := c.cc.Invoke(ctx, "/portdomain.v1.PortDomainAPI/GetPortByLocode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -248,7 +248,7 @@ func (c *portDomainAPIClient) GetPortInfoByLocode(ctx context.Context, in *GetPo
 // PortDomainAPIServer is the server API for PortDomainAPI service.
 type PortDomainAPIServer interface {
 	UpsertPort(context.Context, *UpsertPortRequest) (*UpsertPortResponse, error)
-	GetPortInfoByLocode(context.Context, *GetPortInfoByLocodeRequest) (*GetPortInfoByLocodeResponse, error)
+	GetPortByLocode(context.Context, *GetPortByLocodeRequest) (*GetPortByLocodeResponse, error)
 }
 
 // UnimplementedPortDomainAPIServer can be embedded to have forward compatible implementations.
@@ -258,8 +258,8 @@ type UnimplementedPortDomainAPIServer struct {
 func (*UnimplementedPortDomainAPIServer) UpsertPort(ctx context.Context, req *UpsertPortRequest) (*UpsertPortResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpsertPort not implemented")
 }
-func (*UnimplementedPortDomainAPIServer) GetPortInfoByLocode(ctx context.Context, req *GetPortInfoByLocodeRequest) (*GetPortInfoByLocodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPortInfoByLocode not implemented")
+func (*UnimplementedPortDomainAPIServer) GetPortByLocode(ctx context.Context, req *GetPortByLocodeRequest) (*GetPortByLocodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPortByLocode not implemented")
 }
 
 func RegisterPortDomainAPIServer(s *grpc.Server, srv PortDomainAPIServer) {
@@ -284,20 +284,20 @@ func _PortDomainAPI_UpsertPort_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PortDomainAPI_GetPortInfoByLocode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPortInfoByLocodeRequest)
+func _PortDomainAPI_GetPortByLocode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPortByLocodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PortDomainAPIServer).GetPortInfoByLocode(ctx, in)
+		return srv.(PortDomainAPIServer).GetPortByLocode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/portdomain.v1.PortDomainAPI/GetPortInfoByLocode",
+		FullMethod: "/portdomain.v1.PortDomainAPI/GetPortByLocode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PortDomainAPIServer).GetPortInfoByLocode(ctx, req.(*GetPortInfoByLocodeRequest))
+		return srv.(PortDomainAPIServer).GetPortByLocode(ctx, req.(*GetPortByLocodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -311,8 +311,8 @@ var _PortDomainAPI_serviceDesc = grpc.ServiceDesc{
 			Handler:    _PortDomainAPI_UpsertPort_Handler,
 		},
 		{
-			MethodName: "GetPortInfoByLocode",
-			Handler:    _PortDomainAPI_GetPortInfoByLocode_Handler,
+			MethodName: "GetPortByLocode",
+			Handler:    _PortDomainAPI_GetPortByLocode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

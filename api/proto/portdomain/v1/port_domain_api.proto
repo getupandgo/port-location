@@ -8,7 +8,7 @@ import "api/proto/portdomain/v1/port_info.proto";
 
 service PortDomainAPI {
   rpc UpsertPort(UpsertPortRequest) returns (UpsertPortResponse);
-  rpc GetPortInfoByLocode(GetPortInfoByLocodeRequest) returns (GetPortInfoByLocodeResponse);
+  rpc GetPortByLocode(GetPortByLocodeRequest) returns (GetPortByLocodeResponse);
 }
 
 message UpsertPortRequest {
@@ -17,10 +17,10 @@ message UpsertPortRequest {
 
 message UpsertPortResponse {}
 
-message GetPortInfoByLocodeRequest {
+message GetPortByLocodeRequest {
   string locode = 1;
 }
 
-message GetPortInfoByLocodeResponse {
+message GetPortByLocodeResponse {
   Port port = 1;
 }
