@@ -17,4 +17,4 @@ COPY --from=builder /build/migrations /migrations
 COPY --from=builder /build/cmd/portdomain/config.yaml /config/config.yaml
 
 EXPOSE 9000
-CMD ["./bin/portdomain"]
+CMD ["/bin/portdomain"]
