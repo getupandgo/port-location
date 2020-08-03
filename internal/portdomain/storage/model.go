@@ -7,7 +7,7 @@ import (
 )
 
 type Port struct {
-	Id          string
+	ID          string
 	Locode      string
 	Name        string
 	City        string

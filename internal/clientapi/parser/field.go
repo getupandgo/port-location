@@ -60,6 +60,7 @@ func toModelPort(locode string, rp rawPort) model.Port {
 		if err != nil {
 			fmt.Println(err)
 		}
+
 		fc = int32(f)
 	}
 
