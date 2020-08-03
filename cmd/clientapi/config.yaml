@@ -1,9 +1,9 @@
 http_server:
-  host: localhost
+  host: 0.0.0.0
   port: 8000
 
 grpc_server:
-  host: localhost
+  host: portdomain
   port: 9000
 
 port_file_path: "/port_data/ports.json"
