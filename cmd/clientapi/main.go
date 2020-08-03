@@ -39,9 +39,11 @@ func main() {
 	portDomainClient := portdomain.NewClient(portdomainv1.NewPortDomainAPIClient(conn))
 
 	s := server.NewServer(portDomainClient)
-	if err := s.ParsePortFile(context.Background(), conf.PortFilePath); err != nil {
-		log.Fatalf("failed to parse file: %v", err)
-	}
+	go func() {
+		if err := s.ParsePortFile(context.Background(), conf.PortFilePath); err != nil {
+			log.Fatalf("failed to parse port files: %v", err)
+		}
+	}()
 
 	log.Fatal(http.ListenAndServe(":"+conf.HTTPServer.Port, s.Router))
 }

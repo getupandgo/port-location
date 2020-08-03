@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
 	"os"
 
@@ -18,16 +17,19 @@ func (s *Server) GetPortByLocode(w http.ResponseWriter, r *http.Request) {
 	locode := params["locode"]
 	if locode == "" {
 		writeResponse(w, http.StatusBadRequest, "locode cannot be empty")
+		return
 	}
 
 	port, err := s.portDomainClient.GetPortInfoByLocode(r.Context(), locode)
 	if err != nil {
 		writeResponse(w, http.StatusInternalServerError, "failed to get port info")
+		return
 	}
 
 	b, err := json.Marshal(port)
 	if err != nil {
 		writeResponse(w, http.StatusInternalServerError, "failed to marshal port info")
+		return
 	}
 
 	_, _ = w.Write(b)
@@ -51,7 +53,7 @@ func (s *Server) ParsePortFile(ctx context.Context, path string) error {
 		case port := <-portCh:
 			if err := s.portDomainClient.SendPortInfo(ctx, port); err != nil {
 				//err := parser.SaveUnprocessedPort(deadPortFile, port)
-				log.Print(err.Error())
+				return err
 			}
 		case err := <-errCh:
 			return err
