@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS ports(
     lon text NOT NULL,
     province    text NOT NULL,
     timezone    text NOT NULL,
-    unlocs text[] NOT NULL,
+    unlocs text[],
     foreign_code integer NOT NULL
 );

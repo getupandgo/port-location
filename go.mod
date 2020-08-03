@@ -3,6 +3,7 @@ module port-location
 go 1.14
 
 require (
+	github.com/bcicen/jstream v1.0.0
 	github.com/golang-migrate/migrate/v4 v4.12.1
 	github.com/golang/protobuf v1.4.2
 	github.com/gorilla/mux v1.7.4

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -24,13 +25,16 @@ var conf = clientapi.Config{
 		Host: "localhost",
 		Port: "9000",
 	},
+	PortFilePath: "./port_data/ports.json",
 }
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	conn, err := grpc.DialContext(ctx, conf.GRPCServer.Host+conf.GRPCServer.Port, grpc.WithInsecure(), grpc.WithBlock())
+	serverAddr := fmt.Sprintf(`%s:%s`, conf.GRPCServer.Host, conf.GRPCServer.Port)
+
+	conn, err := grpc.DialContext(ctx, serverAddr, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("fail to dial: %v", err)
 	}
@@ -39,5 +43,9 @@ func main() {
 	portDomainClient := portdomain.NewClient(portdomainv1.NewPortDomainAPIClient(conn))
 
 	s := server.NewServer(portDomainClient)
+	if err := s.ParsePortFile(context.Background(), conf.PortFilePath); err != nil {
+		log.Fatalf("fail to dial: %v", err)
+	}
+
 	log.Fatal(http.ListenAndServe(":"+conf.HTTPServer.Port, s.Router))
 }

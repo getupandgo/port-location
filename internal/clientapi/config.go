@@ -11,6 +11,7 @@ type HTTPServer struct {
 }
 
 type Config struct {
-	HTTPServer `yaml:"http_server" validate:"required"`
-	GRPCServer `yaml:"grpc_server" validate:"required"`
+	HTTPServer   `yaml:"http_server" validate:"required"`
+	GRPCServer   `yaml:"grpc_server" validate:"required"`
+	PortFilePath string `yaml:"port_file_path" validate:"required"`
 }
