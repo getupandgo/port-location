@@ -18,10 +18,17 @@ import (
 	"google.golang.org/genproto/googleapis/type/latlng"
 
 	portdomainv1 "port-location/api/proto/portdomain/v1"
+	"port-location/internal/common/converter"
+	"port-location/internal/common/model"
 	"port-location/internal/portdomain"
-	"port-location/internal/portdomain/model"
 	"port-location/internal/portdomain/storage"
 )
+
+/*
+Methods setupDB(), populateData(), cleanDB() are implemented as fast solution for tests.
+It would be better to control spawning and migrating db from test code.
+Also it would be nice to add a mechanism for populating db with testdata from fixtures (CSV files for example)
+*/
 
 func TestServer_GetPortByLocode(t *testing.T) {
 	db := setupDB(t)
@@ -48,8 +55,8 @@ func TestServer_GetPortByLocode(t *testing.T) {
 		},
 	}
 	for _, tc := range tCases {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-
 			got, err := server.GetPortByLocode(context.Background(),
 				&portdomainv1.GetPortByLocodeRequest{Locode: tc.locode})
 
@@ -111,6 +118,7 @@ func TestServer_UpsertPort(t *testing.T) {
 		},
 	}
 	for _, tc := range tCases {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			server := &Server{storage: storageClient}
 			got, err := server.UpsertPort(context.Background(), &portdomainv1.UpsertPortRequest{Port: tc.port})
@@ -119,7 +127,7 @@ func TestServer_UpsertPort(t *testing.T) {
 
 			res, err := storageClient.GetPort(context.Background(), tc.port.Locode)
 			require.NoError(t, err)
-			assert.Equal(t, tc.port, toGRPCPort(res))
+			assert.Equal(t, tc.port, converter.ToGRPCPort(res))
 		})
 	}
 
@@ -207,7 +215,7 @@ func populateData(t *testing.T, db *sqlx.DB) []*portdomainv1.Port {
 
 		require.NoError(t, err)
 
-		grpcPorts = append(grpcPorts, toGRPCPort(p))
+		grpcPorts = append(grpcPorts, converter.ToGRPCPort(p))
 	}
 
 	return grpcPorts

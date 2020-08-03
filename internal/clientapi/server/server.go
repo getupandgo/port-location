@@ -1,20 +1,26 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
 
-	"port-location/internal/clientapi/portdomain"
+	"port-location/internal/common/model"
 )
+
+type PortDomainClient interface {
+	SendPortInfo(ctx context.Context, port model.Port) error
+	GetPortInfoByLocode(ctx context.Context, locode string) (model.Port, error)
+}
 
 type Server struct {
 	Router           *mux.Router
-	portDomainClient portdomain.Client
+	portDomainClient PortDomainClient
 }
 
-func NewServer(client portdomain.Client) *Server {
+func NewServer(client PortDomainClient) *Server {
 	s := &Server{
 		Router:           mux.NewRouter().StrictSlash(true),
 		portDomainClient: client,

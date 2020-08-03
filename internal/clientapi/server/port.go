@@ -41,6 +41,10 @@ func (s *Server) ParsePortFile(ctx context.Context, path string) error {
 		return err
 	}
 
+	// It would be nice to implement some kind of dead letter queue / retry mechanism.
+	// Thus we will be able to process failed port records without service restart
+	// Not implemented due to limited time
+
 	//deadPortFile, err := os.Open(deadPortFilePath)
 	//if err != nil {
 	//	return err

@@ -3,7 +3,7 @@ package storage
 import (
 	"github.com/lib/pq"
 
-	"port-location/internal/portdomain/model"
+	"port-location/internal/common/model"
 )
 
 type Port struct {

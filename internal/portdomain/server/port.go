@@ -5,16 +5,17 @@ import (
 	"database/sql"
 	"errors"
 
-	"google.golang.org/genproto/googleapis/type/latlng"
-
 	portdomainv1 "port-location/api/proto/portdomain/v1"
-	"port-location/internal/portdomain/model"
+	"port-location/internal/common/converter"
 )
 
-var ErrNotFound = errors.New("port not found")
+var (
+	ErrNotFound      = errors.New("port not found")
+	ErrInvalidLocode = errors.New("locode cannot be empty")
+)
 
 func (s *Server) UpsertPort(ctx context.Context, req *portdomainv1.UpsertPortRequest) (*portdomainv1.UpsertPortResponse, error) {
-	if err := s.storage.UpsertPort(ctx, fromGRPCPort(req.Port)); err != nil {
+	if err := s.storage.UpsertPort(ctx, converter.FromGRPCPort(req.Port)); err != nil {
 		return nil, err
 	}
 
@@ -24,7 +25,7 @@ func (s *Server) UpsertPort(ctx context.Context, req *portdomainv1.UpsertPortReq
 func (s *Server) GetPortByLocode(ctx context.Context,
 	req *portdomainv1.GetPortByLocodeRequest) (*portdomainv1.GetPortByLocodeResponse, error) {
 	if req.Locode == "" {
-		return nil, errors.New("locode cannot be empty")
+		return nil, ErrInvalidLocode
 	}
 
 	p, err := s.storage.GetPort(ctx, req.Locode)
@@ -36,43 +37,5 @@ func (s *Server) GetPortByLocode(ctx context.Context,
 		return nil, err
 	}
 
-	return &portdomainv1.GetPortByLocodeResponse{Port: toGRPCPort(p)}, nil
-}
-
-func toGRPCPort(p model.Port) *portdomainv1.Port {
-	return &portdomainv1.Port{
-		Locode:  p.Locode,
-		Name:    p.Name,
-		City:    p.City,
-		Country: p.Country,
-		Alias:   p.Alias,
-		Regions: p.Regions,
-		Coordinates: &latlng.LatLng{
-			Latitude:  p.Coordinates.Lat,
-			Longitude: p.Coordinates.Lon,
-		},
-		Province:    p.Province,
-		Timezone:    p.Timezone,
-		Unlocs:      p.Unlocs,
-		ForeignCode: p.ForeignCode,
-	}
-}
-
-func fromGRPCPort(p *portdomainv1.Port) model.Port {
-	return model.Port{
-		Locode:  p.Locode,
-		Name:    p.Name,
-		City:    p.City,
-		Country: p.Country,
-		Alias:   p.Alias,
-		Regions: p.Regions,
-		Coordinates: model.LatLng{
-			Lat: p.Coordinates.GetLatitude(),
-			Lon: p.Coordinates.GetLongitude(),
-		},
-		Province:    p.Province,
-		Timezone:    p.Timezone,
-		Unlocs:      p.Unlocs,
-		ForeignCode: p.ForeignCode,
-	}
+	return &portdomainv1.GetPortByLocodeResponse{Port: converter.ToGRPCPort(p)}, nil
 }

@@ -3,25 +3,25 @@ package portdomain
 import (
 	"context"
 
-	"google.golang.org/genproto/googleapis/type/latlng"
-
 	portdomainv1 "port-location/api/proto/portdomain/v1"
-	"port-location/internal/clientapi/model"
+	"port-location/internal/common/converter"
+	"port-location/internal/common/model"
 )
 
+// wrapper around grpc service to abstract transport layer logic
 type Client struct {
 	conn portdomainv1.PortDomainAPIClient
 }
 
-func NewClient(conn portdomainv1.PortDomainAPIClient) Client {
-	return Client{
+func NewClient(conn portdomainv1.PortDomainAPIClient) *Client {
+	return &Client{
 		conn: conn,
 	}
 }
 
 func (s *Client) SendPortInfo(ctx context.Context, port model.Port) error {
 	_, err := s.conn.UpsertPort(ctx, &portdomainv1.UpsertPortRequest{
-		Port: toGRPCPort(port),
+		Port: converter.ToGRPCPort(port),
 	})
 
 	return err
@@ -35,43 +35,5 @@ func (s *Client) GetPortInfoByLocode(ctx context.Context, locode string) (model.
 		return model.Port{}, err
 	}
 
-	return fromGRPCPort(res.Port), nil
-}
-
-func toGRPCPort(p model.Port) *portdomainv1.Port {
-	return &portdomainv1.Port{
-		Locode:  p.Locode,
-		Name:    p.Name,
-		City:    p.City,
-		Country: p.Country,
-		Alias:   p.Alias,
-		Regions: p.Regions,
-		Coordinates: &latlng.LatLng{
-			Latitude:  p.Coordinates.Lat,
-			Longitude: p.Coordinates.Lon,
-		},
-		Province:    p.Province,
-		Timezone:    p.Timezone,
-		Unlocs:      p.Unlocs,
-		ForeignCode: p.ForeignCode,
-	}
-}
-
-func fromGRPCPort(p *portdomainv1.Port) model.Port {
-	return model.Port{
-		Locode:  p.Locode,
-		Name:    p.Name,
-		City:    p.City,
-		Country: p.Country,
-		Alias:   p.Alias,
-		Regions: p.Regions,
-		Coordinates: model.LatLng{
-			Lat: p.Coordinates.GetLatitude(),
-			Lon: p.Coordinates.GetLongitude(),
-		},
-		Province:    p.Province,
-		Timezone:    p.Timezone,
-		Unlocs:      p.Unlocs,
-		ForeignCode: p.ForeignCode,
-	}
+	return converter.FromGRPCPort(res.Port), nil
 }

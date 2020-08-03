@@ -1,14 +1,14 @@
 package parser
 
 import (
-	"fmt"
 	"strconv"
 
-	"port-location/internal/clientapi/model"
+	"port-location/internal/common/model"
 )
 
 type rawPort map[string]interface{}
 
+// wrapper methods on jstream lib for casting interface{} values to concrete types
 func (rp rawPort) asString(k string) string {
 	var v string
 
@@ -49,7 +49,7 @@ func (rp rawPort) asFloatSlice(k string) []float64 {
 	return vls
 }
 
-func toModelPort(locode string, rp rawPort) model.Port {
+func toModelPort(locode string, rp rawPort) (model.Port, error) {
 	var (
 		fc    int32
 		coord model.LatLng
@@ -58,7 +58,7 @@ func toModelPort(locode string, rp rawPort) model.Port {
 	if foreignCode := rp.asString("code"); foreignCode != "" {
 		f, err := strconv.Atoi(foreignCode)
 		if err != nil {
-			fmt.Println(err)
+			return model.Port{}, err
 		}
 
 		fc = int32(f)
@@ -85,5 +85,5 @@ func toModelPort(locode string, rp rawPort) model.Port {
 		Timezone:    rp.asString("timezone"),
 		Unlocs:      rp.asStringSlice("unlocs"),
 		ForeignCode: fc,
-	}
+	}, nil
 }

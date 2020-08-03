@@ -7,7 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 
-	"port-location/internal/portdomain/model"
+	"port-location/internal/common/model"
 )
 
 type Client struct {
@@ -19,6 +19,19 @@ func NewClient(db *sqlx.DB) Client {
 		db: db,
 	}
 }
+
+/* Database is denormalized due to lack of time.
+NoSQL solution isn't chosen vecause data is strongly structured, similar, and mostly constant (city names, country names, etc)
+
+Normalized version would seem like this:
+Country (country_name, fk city)
+City (city_name, province_name, fk port)
+Port (locode, name, alias, lat, lon, foreign_code).
+
+Later tables can be extended to contain airports and documents required to enter the country (visa info, medical data)
+This will allow to calculate estimated route between departure and ship boarding and similar work automation processes
+Also it would be great to store lat, lon as postgis geography for easier distance calculation (e.g. between ports, port/city, etc)
+*/
 
 func (c *Client) UpsertPort(ctx context.Context, port model.Port) error {
 	_, err := c.db.ExecContext(ctx,

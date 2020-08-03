@@ -9,9 +9,7 @@ type Server struct {
 }
 
 func NewServer(storage storage.Client) *Server {
-	s := &Server{
+	return &Server{
 		storage: storage,
 	}
-
-	return s
 }
