@@ -2,13 +2,14 @@ version: '2'
 
 vars:
   BIN_DIR: '{{ default "bin" .BUILD_BIN_DIR }}'
+  VERSION: 0.1
 
 tasks:
   build:
     desc: "build binaries in {{ .BIN_DIR }}"
     cmds:
       - mkdir -p "{{ .BIN_DIR }}"
-        go build -o "{{ .BIN_DIR }}/" ./cmd/...
+      - go build -o "{{ .BIN_DIR }}/" ./cmd/...
 
   run:
     desc: "runs local api binary with config file provided in API_CONFIG_PATH"
@@ -36,7 +37,9 @@ tasks:
   test_integration:
     desc: "Run integration tests"
     cmds:
+      - docker run --name test-postgres -e POSTGRES_PASSWORD=example -p 5435:5432 -d postgres
       - CGO_ENABLED=1 go test -race -p=1 -count=1 ./test/...
+      - docker rm test-postgres
 
   gen_grpc:
     desc: "Generate go files for gRPC"
@@ -44,3 +47,10 @@ tasks:
       - prototool format -w
       - prototool generate .
 
+  build_portdomain:
+    cmds:
+      - docker build -f build/package/portdomain/Dockerfile -t getupandgo/portdomain:{{.VERSION}} .
+
+  build_clientapi:
+    cmds:
+      - docker build -f build/package/clientapi/Dockerfile -t getupandgo/clientapi:{{.VERSION}} .

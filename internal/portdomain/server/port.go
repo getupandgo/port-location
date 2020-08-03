@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 
 	"google.golang.org/genproto/googleapis/type/latlng"
@@ -9,6 +10,8 @@ import (
 	portdomainv1 "port-location/api/proto/portdomain/v1"
 	"port-location/internal/portdomain/model"
 )
+
+var ErrNotFound = errors.New("port not found")
 
 func (s *Server) UpsertPort(ctx context.Context, req *portdomainv1.UpsertPortRequest) (*portdomainv1.UpsertPortResponse, error) {
 	if err := s.storage.UpsertPort(ctx, fromGRPCPort(req.Port)); err != nil {
@@ -25,7 +28,11 @@ func (s *Server) GetPortByLocode(ctx context.Context,
 	}
 
 	p, err := s.storage.GetPort(ctx, req.Locode)
-	if err != nil {
+	switch err {
+	case sql.ErrNoRows:
+		return nil, ErrNotFound
+	case nil:
+	default:
 		return nil, err
 	}
 
