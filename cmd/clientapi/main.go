@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"google.golang.org/grpc"
@@ -15,20 +16,15 @@ import (
 	"port-location/internal/clientapi/server"
 )
 
-// nolint: gochecknoglobals
-var conf = clientapi.Config{
-	HTTPServer: clientapi.HTTPServer{
-		Host: "localhost",
-		Port: "8000",
-	},
-	GRPCServer: clientapi.GRPCServer{
-		Host: "localhost",
-		Port: "9000",
-	},
-	PortFilePath: "./port_data/ports.json",
-}
-
 func main() {
+	confPath := os.Getenv("CONFIG_PATH")
+
+	var conf clientapi.Config
+	if err := conf.Read(confPath); err != nil {
+		log.Fatal(err.Error())
+		return
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
@@ -44,7 +40,7 @@ func main() {
 
 	s := server.NewServer(portDomainClient)
 	if err := s.ParsePortFile(context.Background(), conf.PortFilePath); err != nil {
-		log.Fatalf("fail to dial: %v", err)
+		log.Fatalf("failed to parse file: %v", err)
 	}
 
 	log.Fatal(http.ListenAndServe(":"+conf.HTTPServer.Port, s.Router))

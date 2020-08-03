@@ -1,0 +1,11 @@
+grpc_server:
+  host: localhost
+  port: 9000
+
+db:
+  host: postgres
+  port: 5432
+  name: postgres
+  username: postgres
+  password: example
+  migrations_dir: file:///migrations

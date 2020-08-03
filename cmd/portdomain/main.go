@@ -1,9 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"time"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -18,29 +21,24 @@ import (
 	"port-location/internal/portdomain/storage"
 )
 
-// nolint: gochecknoglobals
-var conf = portdomain.Config{
-	GRPCServer: portdomain.GRPCServer{
-		Host: "localhost",
-		Port: "9000",
-	},
-	DB: portdomain.DB{
-		Host:          "localhost",
-		Port:          "5432",
-		Name:          "postgres",
-		Username:      "postgres",
-		Password:      "example",
-		MigrationsDir: "file:///Users/getupandgo/projects/port-location/migrations",
-	},
-}
-
 func main() {
+	confPath := os.Getenv("CONFIG_PATH")
+
+	var conf portdomain.Config
+	if err := conf.Read(confPath); err != nil {
+		log.Fatal(err.Error())
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
 	psqlConf := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		conf.DB.Host, conf.DB.Port, conf.DB.Username, conf.DB.Password, conf.DB.Name,
 	)
 
-	db, err := sqlx.Connect("postgres", psqlConf)
+	db, err := sqlx.ConnectContext(ctx, "postgres", psqlConf)
 	if err != nil {
 		log.Fatalf("failed to connect to db: %v", err)
 	}
