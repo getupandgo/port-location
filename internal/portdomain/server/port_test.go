@@ -31,10 +31,10 @@ Also it would be nice to add a mechanism for populating db with testdata from fi
 */
 
 func TestServer_GetPortByLocode(t *testing.T) {
-	db := setupDB(t)
-	defer db.Close()
-	grpcPorts := populateData(t, db)
-	server := &Server{storage: storage.NewClient(db)}
+	tdb := NewTestDB(t)
+	defer tdb.Close(t)
+	grpcPorts := populateData(t, tdb.DB)
+	server := &Server{storage: storage.NewClient(tdb.DB)}
 
 	tCases := []struct {
 		name         string
@@ -69,15 +69,13 @@ func TestServer_GetPortByLocode(t *testing.T) {
 			}
 		})
 	}
-
-	cleanDB(t, db)
 }
 
 func TestServer_UpsertPort(t *testing.T) {
-	db := setupDB(t)
-	defer db.Close()
+	tdb := NewTestDB(t)
+	defer tdb.Close(t)
 
-	storageClient := storage.NewClient(db)
+	storageClient := storage.NewClient(tdb.DB)
 
 	tCases := []struct {
 		name string
@@ -130,20 +128,21 @@ func TestServer_UpsertPort(t *testing.T) {
 			assert.Equal(t, tc.port, converter.ToGRPCPort(res))
 		})
 	}
-
-	cleanDB(t, db)
 }
 
-func setupDB(t *testing.T) *sqlx.DB {
-	migrationPath := os.Getenv("MIGRATIONS_PATH")
+type TestDB struct {
+	DB   *sqlx.DB
+	conf portdomain.DB
+}
 
+func NewTestDB(t *testing.T) TestDB {
 	testConf := portdomain.DB{
 		Host:          "localhost",
 		Port:          "5435",
 		Name:          "postgres",
 		Username:      "postgres",
 		Password:      "example",
-		MigrationsDir: migrationPath,
+		MigrationsDir: os.Getenv("MIGRATIONS_PATH"),
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
@@ -154,22 +153,44 @@ func setupDB(t *testing.T) *sqlx.DB {
 		testConf.Host, testConf.Port, testConf.Username, testConf.Password, testConf.Name,
 	)
 
-	db, err := sqlx.ConnectContext(ctx, "postgres", psqlConf)
+	dbs, err := sqlx.ConnectContext(ctx, "postgres", psqlConf)
 	require.NoError(t, err)
 
-	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
-	require.NoError(t, err)
-
-	m, err := migrate.NewWithDatabaseInstance(testConf.MigrationsDir, testConf.Name, driver)
-	require.NoError(t, err)
-
-	if err := m.Up(); err != nil {
-		if err != migrate.ErrNoChange {
-			require.NoError(t, err)
-		}
+	d := TestDB{
+		conf: testConf,
+		DB:   dbs,
 	}
 
-	return db
+	d.mustMigrate(t, true)
+
+	return d
+}
+
+func (td *TestDB) mustMigrate(t *testing.T, migrateUp bool) {
+	driver, err := postgres.WithInstance(td.DB.DB, &postgres.Config{})
+	require.NoError(t, err)
+
+	m, err := migrate.NewWithDatabaseInstance(td.conf.MigrationsDir, td.conf.Name, driver)
+	require.NoError(t, err)
+
+	var migrateErr error
+
+	if migrateUp {
+		migrateErr = m.Up()
+	} else {
+		migrateErr = m.Down()
+	}
+
+	if migrateErr != nil && err != migrate.ErrNoChange {
+		require.NoError(t, err)
+	}
+}
+
+func (td *TestDB) Close(t *testing.T) {
+	td.mustMigrate(t, false)
+	if err := td.DB.Close(); err != nil {
+		require.NoError(t, err)
+	}
 }
 
 func populateData(t *testing.T, db *sqlx.DB) []*portdomainv1.Port {
@@ -219,11 +240,4 @@ func populateData(t *testing.T, db *sqlx.DB) []*portdomainv1.Port {
 	}
 
 	return grpcPorts
-}
-
-func cleanDB(t *testing.T, db *sqlx.DB) {
-	_, err := db.Exec(`DROP TABLE IF EXISTS ports`)
-	require.NoError(t, err)
-	_, err = db.Exec(`DROP TABLE IF EXISTS schema_migrations`)
-	require.NoError(t, err)
 }
